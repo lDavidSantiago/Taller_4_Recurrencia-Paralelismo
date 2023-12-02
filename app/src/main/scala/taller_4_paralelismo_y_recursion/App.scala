@@ -11,12 +11,12 @@ package taller_4_paralelismo_y_recursion
 object App {
   def main(args: Array[String]): Unit = {
     val matrices = new Matrices()
-    val m1 = Vector(Vector(1, 4), Vector(5, 6))
-    val m2 = Vector(Vector(1, 2), Vector(3, 4))
     println(matrices.multMatriz(Vector(Vector(1, 4), Vector(5, 6)), Vector(Vector(1, 2), Vector(3, 4))))
-    println(matrices.multMatrizParalelo(Vector(Vector(1, 4), Vector(5, 6)), Vector(Vector(1, 2), Vector(3, 4))))
+    println(matrices.multMatrozRec(Vector(Vector(1, 4), Vector(5, 6)), Vector(Vector(1, 2), Vector(3, 4))))
+
 
   }
+
 
 
 }
