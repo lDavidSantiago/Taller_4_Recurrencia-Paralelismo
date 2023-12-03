@@ -51,10 +51,9 @@ class Matrices{
   def multMatrozRec(mtx1: Matriz, mtx2: Matriz): Matriz = {
     val n = mtx1.length
     val halfN = n / 2
-
     if (n == 1) {
       Vector(Vector(mtx1.head.head * mtx2.head.head))
-    } else {
+    } else{
       val (a, c) = mtx1.splitAt(halfN)
       val (a1, b1) = a.map(_.splitAt(halfN)).unzip
       val (c1, d1) = c.map(_.splitAt(halfN)).unzip
@@ -69,11 +68,49 @@ class Matrices{
       val rightlow = matrixAddition(multMatrozRec(c1, f1), multMatrozRec(d1, h1))
 
       (leftup zip rightup map { case (x, y) => x ++ y }) ++ (leftlow zip rightlow map { case (x, y) => x ++ y })
-    }
+
+
+      }
   }
   def matrixAddition(mtx1: Matriz, mtx2: Matriz): Matriz = {
     val n = mtx1.length
     Vector.tabulate(n, n)((i, j) => mtx1(i)(j) + mtx2(i)(j))
+  }
+  def matrixsubtraction(mtx1: Matriz, mtx2: Matriz): Matriz = {
+    val n = mtx1.length
+    Vector.tabulate(n, n)((i, j) => mtx1(i)(j) - mtx2(i)(j))
+  }
+
+  def subMatriz(m: Matriz, i: Int, j: Int, l: Int): Matriz = {
+    Vector.tabulate(l, l) { (row, col) => m(i + row)(j + col)
+    }
+  }
+
+  def multMatrizRec(m1: Matriz, m2: Matriz): Matriz = {
+    val n = m1.length
+
+    if (n == 1) {
+      Vector(Vector(m1(0)(0) * m2(0)(0)))
+    } else {
+      val newSize = n / 2
+      val a = subMatriz(m1, 0, 0, newSize)
+      val b = subMatriz(m1, 0, newSize, newSize)
+      val c = subMatriz(m1, newSize, 0, newSize)
+      val d = subMatriz(m1, newSize, newSize, newSize)
+      val e = subMatriz(m2, 0, 0, newSize)
+      val f = subMatriz(m2, 0, newSize, newSize)
+      val g = subMatriz(m2, newSize, 0, newSize)
+      val h = subMatriz(m2, newSize, newSize, newSize)
+
+      val c11 = matrixAddition(multMatrizRec(a, e), multMatrizRec(b, g))
+      val c12 = matrixAddition(multMatrizRec(a, f), multMatrizRec(b, h))
+      val c21 = matrixAddition(multMatrizRec(c, e), multMatrizRec(d, g))
+      val c22 = matrixAddition(multMatrizRec(c, f), multMatrizRec(d, h))
+
+      val top = c11.zip(c12).map { case (row1, row2) => row1 ++ row2 }
+      val bottom = c21.zip(c22).map { case (row1, row2) => row1 ++ row2 }
+      top ++ bottom
+    }
   }
 
 
