@@ -40,6 +40,9 @@ class Matrices{
     sum1.join() + sum2.join()
   }
 
+
+
+
   // Transpuesta de una matriz
   def transpuesta(m: Matriz): Matriz = {
     val l = m.length

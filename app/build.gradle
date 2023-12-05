@@ -14,15 +14,18 @@ plugins {
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
+
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/com.storm-enroute/scalameter-core
+    implementation group: 'com.storm-enroute', name: 'scalameter-core_2.13', version: '0.21'
+
     // Use Scala 2.13 in our library project
     implementation libs.scala.library
     implementation 'org.scala-lang.modules:scala-parallel-collections_2.13:1.0.4'
-
+    implementation 'com.storm-enroute:scalameter_2.13:0.21'
     // This dependency is used by the application.
     implementation libs.guava
 
