@@ -8,22 +8,23 @@ import org.junit.runner.RunWith
 import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class AppSuite extends AnyFunSuite {
+class MultMatrizTest extends AnyFunSuite {
 
-  test("test 1"){
+  test("test 1 2x2"){
     val matrices = new Matrices()
     val e1 = matrices.multMatriz(Vector(Vector(1, 4), Vector(5, 6)), Vector(Vector(1, 2), Vector(3, 4)))
     assert(e1 == Vector(Vector(13, 18), Vector(23, 34)))
   }
-  test("test 2") {
+  test("test 2 2x2 ") {
     val matrices = new Matrices()
     val e2 = matrices.multMatriz(Vector(Vector(2, 0), Vector(1, 2)), Vector(Vector(1, 2), Vector(3, 4)))
     assert(e2 == Vector(Vector(2, 4), Vector(7, 10)))
   }
 
-  test("test 3") {
+  test("test 3 1x1 ") {
     val matrices = new Matrices()
     val e4 = matrices.multMatriz(Vector(Vector(1)), Vector(Vector(2)))
     assert(e4 == Vector(Vector(2)))
   }
+
 }

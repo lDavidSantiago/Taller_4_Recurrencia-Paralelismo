@@ -1,6 +1,8 @@
 package taller_4_paralelismo_y_recursion
 import common._
 
+import scala.collection.parallel.CollectionConverters._
+import scala.collection.parallel.immutable.ParVector
 import scala.util.Random
 class Matrices{
   val random = new Random()
@@ -130,6 +132,37 @@ class Matrices{
       val bottom = c21.zip(c22).map { case (row1, row2) => row1 ++ row2 }
       top ++ bottom
     }}
+  def multMatrizRecPar(m1: Matriz, m2: Matriz): Matriz = {
+    val n = m1.length
+
+    if (n == 1) {
+      Vector(Vector(m1(0)(0) * m2(0)(0)))
+    } else {
+      val m = n / 2
+
+      val a11 = subMatriz(m1, 0, 0, m)
+      val a12 = subMatriz(m1, 0, m, m)
+      val a21 = subMatriz(m1, m, 0, m)
+      val a22 = subMatriz(m1, m, m, m)
+
+      val b11 = subMatriz(m2, 0, 0, m)
+      val b12 = subMatriz(m2, 0, m, m)
+      val b21 = subMatriz(m2, m, 0, m)
+      val b22 = subMatriz(m2, m, m, m)
+
+      val (c11,c12,c21,c22)= parallel(matrixAddition(multMatrizRecPar(a11, b11), multMatrizRecPar(a12, b21)),
+                                      matrixAddition(multMatrizRecPar(a11, b12), multMatrizRecPar(a12, b22)),
+                                      matrixAddition(multMatrizRecPar(a21, b11), multMatrizRecPar(a22, b21)),
+                                      matrixAddition(multMatrizRecPar(a21, b12), multMatrizRecPar(a22, b22)))
+
+      Vector.tabulate(n, n) { (i, j) =>
+        if (i < m && j < m) c11(i)(j)
+        else if (i < m) c12(i)(j - m)
+        else if (j < m) c21(i - m)(j)
+        else c22(i - m)(j - m)
+      }
+    }
+  }
 // Algoritmo de Strassen
   def multStrassen(m1: Matriz, m2: Matriz): Matriz = {
     // Recibe m1 y m2 matrices cuadradas de la misma dimensión (potencia de 2)
@@ -248,6 +281,9 @@ class Matrices{
         }
       }
     }
+  def prodPuntoParD ( v1 : ParVector [ Int ] , v2 : ParVector [ Int ] ) : Int ={
+    ( v1 zip v2 ) .map({ case ( i , j )=> ( i * j ) } ) . sum
+  }
 
 
 

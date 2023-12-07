@@ -4,6 +4,7 @@
 package taller_4_paralelismo_y_recursion
 import org.scalameter.withWarmer
 import org.scalameter.Warmer.Default
+import scala.collection.parallel.CollectionConverters._
 
 import org.scalameter.measurer
 
@@ -17,45 +18,22 @@ object App {
   type Matriz = Vector[Vector[Int]]
   def main(args: Array[String]): Unit = {
     val matrices = new Matrices()
-    val m1 = matrices.vectorAlAzar(8,8)
-    val m2 = matrices.vectorAlAzar(8,8)
-    val matrizA = matrices.matrizAlAzar(1024,1024)
-    val matrizB = matrices.matrizAlAzar(1024,1024)
-    val matrizA1 = matrices.matrizAlAzar(512,512)
-    val matrizB1 = matrices.matrizAlAzar(512,512)
-    val parmatrices = (matrizA,matrizB)
+    val matrizA = matrices.matrizAlAzar(2,2)
+    val matrizB = matrices.matrizAlAzar(2,2)
     def compararAlgoritmos(f1: (Matriz, Matriz) => Matriz, f2: (Matriz, Matriz) => Matriz, m1: Matriz, m2: Matriz): Unit = {
       val time1 = withWarmer(new Default) measure {
         f1(m1, m2)
       }
-      println(s"Tiempo de ejecucion de la funcion 1: $time1")
+      println(s"Tiempo de ejecucion de la funcion reqsec: $time1")
       val time2 = withWarmer(new Default) measure {
         f2(m1, m2)
       }
-      println(s"Tiempo de ejecucion de la funcion 2: $time2")
+      println(s"Tiempo de ejecucion de la funcion par: $time2")
 
       val aceleracion = time1.value / time2.value
       println(s"aceleracion: $aceleracion")
     }
-    //compararAlgoritmos(matrices.multMatriz, matrices.multMatrizParalelo, matrizA, matrizB)
-
-    def compararAlgoritmosTiempos(f1: (Matriz, Matriz) => Matriz, f2: (Matriz, Matriz) => Matriz,f3:(Matriz,Matriz) => Matriz, m1: Matriz, m2: Matriz): Unit = {
-      val time1 = withWarmer(new Default) measure {
-        f1(m1, m2)
-      }
-      println(s"Tiempo de ejecucion de la funcion 1 secuacial: $time1")
-      val time2 = withWarmer(new Default) measure {
-        f2(m1, m2)
-      }
-      println(s"Tiempo de ejecucion de la funcion 2 PARALA: $time2")
-      val time3 =withWarmer(new Default) measure {
-        f3(m1, m2)
-      }
-      println(s"Tiempo de ejecucion de la funcion 3 RECURSIVA: $time3")
-      val aceleracion = time1.value / time2.value
-      println(s"aceleracion: $aceleracion")
-    }
-    compararAlgoritmosTiempos(matrices.multMatriz, matrices.multMatrizParalelo,matrices.multMatrozRec, matrizA, matrizB)
+    compararAlgoritmos(matrices.multMatrizRecSec, matrices.multMatrizRecSec, matrizA, matrizB)
   }
 
 }
